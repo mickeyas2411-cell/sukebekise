@@ -60,11 +60,11 @@ saveTelegramUser();
     const user = tg.initDataUnsafe?.user;
 
     if (!user) {
-        console.log("Telegram user not found");
+        alert("Telegram user አልተገኘም");
         return;
     }
 
-    const { error } = await supabaseClient
+    const result = await supabaseClient
         .from("users")
         .upsert({
             telegram_id: user.id,
@@ -73,8 +73,10 @@ saveTelegramUser();
             onConflict: "telegram_id"
         });
 
-    if (error) {
-        console.error("Supabase error:", error);
+    if (result.error) {
+        alert("Supabase Error: " + result.error.message);
+    } else {
+        alert("User በትክክል ተመዝግቧል!");
     }
 })();
 </script>
