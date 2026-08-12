@@ -30,6 +30,28 @@ const supabaseClient = supabase.createClient(
     SUPABASE_KEY sb_publishable_yolxFEiDuFSF2qW7qjLTRw_o82NeWvj
 );
 </script>
+<script>
+async function saveTelegramUser() {
+    const tg = window.Telegram.WebApp;
+    const user = tg.initDataUnsafe?.user;
+
+    if (!user) return;
+
+    const { error } = await supabaseClient
+        .from("users")
+        .upsert({
+            telegram_id: user.id,
+            first_name: user.first_name
+        }, {
+            onConflict: "telegram_id"
+        });
+
+    if (error) {
+        console.error(error);
+    }
+}
+saveTelegramUser();
+</script>
 body{
 background:var(--bg);
 color:var(--text);
