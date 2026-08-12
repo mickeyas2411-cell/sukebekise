@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="am">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ሱቅ በኪሴ</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Tahoma,sans-serif}
+
+:root{
+--primary:#047857;
+--primary2:#059669;
+--bg:#f5f7f6;
+--card:#fff;
+--text:#17201d;
+--muted:#6b7280;
+--border:#e5e7eb;
+--danger:#ef4444;
+--gold:#f59e0b;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+padding-bottom:80px;
+}
+
+body.dark{
+--bg:#111827;
+--card:#1f2937;
+--text:#f3f4f6;
+--muted:#9ca3af;
+--border:#374151;
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#047857,#059669);
+color:white;
+padding:18px 15px 20px;
+border-radius:0 0 22px 22px;
+}
+
+.header-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.logo{
+font-size:22px;
+font-weight:800;
+}
+
+.header-actions{
+display:flex;
+gap:8px;
+}
+
+.icon-btn{
+width:40px;
+height:40px;
+border:0;
+border-radius:50%;
+background:rgba(255,255,255,.18);
+color:white;
+font-size:18px;
+}
+
+.subtitle{
+margin-top:6px;
+font-size:12px;
+opacity:.9;
+}
+
+.search{
+margin-top:16px;
+background:white;
+border-radius:13px;
+display:flex;
+align-items:center;
+padding:0 13px;
+}
+
+.search span{font-size:18px}
+
+.search input{
+border:0;
+outline:0;
+width:100%;
+padding:13px 9px;
+color:#222;
+background:transparent;
+}
+
+/* CONTAINER */
+.container{
+max-width:850px;
+margin:auto;
+padding:15px;
+}
+
+/* SECTION */
+.section{margin-top:20px}
+
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.section-title{
+font-size:17px;
+font-weight:800;
+}
+
+.see-all{
+border:0;
+background:none;
+color:var(--primary);
+font-size:12px;
+font-weight:bold;
+}
+
+/* CATEGORIES */
+.categories{
+display:flex;
+gap:9px;
+overflow-x:auto;
+padding-bottom:5px;
+scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{display:none}
+
+.category{
+flex:0 0 auto;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+border-radius:14px;
+padding:10px 13px;
+font-size:12px;
+font-weight:bold;
+}
+
+.category.active{
+background:var(--primary);
+color:white;
+border-color:var(--primary);
+}
+
+/* VIP */
+.vip-scroll{
+display:flex;
+gap:12px;
+overflow-x:auto;
+scrollbar-width:none;
+}
+
+.vip-scroll::-webkit-scrollbar{display:none}
+
+.vip-card{
+flex:0 0 210px;
+background:var(--card);
+border:2px solid #fbbf24;
+border-radius:16px;
+overflow:hidden;
+position:relative;
+}
+
+.vip-img{
+height:125px;
+background:#e5e7eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:42px;
+}
+
+.vip-info{padding:10px}
+
+.vip-badge{
+display:inline-block;
+background:#fbbf24;
+color:#111;
+padding:3px 7px;
+border-radius:6px;
+font-size:10px;
+font-weight:bold;
+margin-bottom:5px;
+}
+
+.vip-price{
+color:var(--primary);
+font-weight:800;
+margin-top:5px;
+}
+
+/* PRODUCTS */
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.product{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:15px;
+overflow:hidden;
+position:relative;
+box-shadow:0 2px 7px rgba(0,0,0,.04);
+}
+
+.product-img{
+height:150px;
+background:#e5e7eb;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:45px;
+color:#9ca3af;
+}
+
+.product-info{padding:11px}
+
+.product-name{
+font-size:14px;
+font-weight:800;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.product-price{
+color:var(--primary);
+font-weight:900;
+margin-top:5px;
+font-size:14px;
+}
+
+.product-location{
+color:var(--muted);
+font-size:11px;
+margin-top:5px;
+}
+
+.product-seller{
+color:var(--muted);
+font-size:11px;
+margin-top:3px;
+}
+
+.favorite{
+position:absolute;
+right:8px;
+top:8px;
+width:34px;
+height:34px;
+border:0;
+border-radius:50%;
+background:white;
+font-size:18px;
+box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+/* FEEDBACK */
+.feedback-btn{
+width:100%;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--primary);
+padding:14px;
+border-radius:13px;
+font-weight:bold;
+font-size:13px;
+box-shadow:0 2px 7px rgba(0,0,0,.03);
+}
+
+.feedback-btn:active{
+transform:scale(.98);
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:100;
+display:flex;
+align-items:flex-end;
+justify-content:center;
+}
+
+.modal-box{
+background:var(--card);
+color:var(--text);
+width:100%;
+max-width:600px;
+max-height:92vh;
+overflow-y:auto;
+border-radius:22px 22px 0 0;
+padding:18px;
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.close{
+border:0;
+background:#e5e7eb;
+width:35px;
+height:35px;
+border-radius:50%;
+}
+
+.form-group{margin-bottom:13px}
+
+.form-group label{
+display:block;
+font-size:12px;
+font-weight:bold;
+margin-bottom:6px;
+}
+
+.form-control{
+width:100%;
+padding:12px;
+border:1px solid var(--border);
+border-radius:10px;
+background:var(--bg);
+color:var(--text);
+outline:none;
+}
+
+textarea.form-control{
+min-height:100px;
+resize:vertical;
+}
+
+.primary-btn{
+width:100%;
+border:0;
+background:var(--primary);
+color:white;
+padding:13px;
+border-radius:11px;
+font-weight:bold;
+}
+
+.secondary-btn{
+width:100%;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+padding:12px;
+border-radius:11px;
+font-weight:bold;
+margin-top:8px;
+}
+
+/* PHOTO PREVIEW */
+.preview{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+margin-top:8px;
+}
+
+.preview div{
+height:70px;
+border-radius:8px;
+overflow:hidden;
+background:#ddd;
+}
+
+.preview img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* DETAILS */
+.detail-image{
+height:280px;
+background:#e5e7eb;
+border-radius:15px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:70px;
+}
+
+.detail-price{
+font-size:23px;
+color:var(--primary);
+font-weight:900;
+margin:12px 0;
+}
+
+.detail-desc{
+color:var(--muted);
+line-height:1.7;
+font-size:13px;
+white-space:pre-wrap;
+}
+
+.seller-box{
+margin-top:18px;
+border:1px solid var(--border);
+border-radius:13px;
+padding:13px;
+}
+
+.contact-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:10px;
+}
+
+.call-btn,.telegram-btn{
+border:0;
+padding:11px;
+border-radius:9px;
+color:white;
+font-weight:bold;
+}
+
+.call-btn{background:#16a34a}
+.telegram-btn{background:#229ed9}
+
+/* EMPTY */
+.empty{
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+font-size:13px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:68px;
+background:var(--card);
+border-top:1px solid var(--border);
+display:flex;
+justify-content:space-around;
+align-items:center;
+z-index:50;
+}
+
+.nav-btn{
+border:0;
+background:none;
+color:var(--muted);
+font-size:10px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:3px;
+}
+
+.nav-btn span{font-size:21px}
+
+.nav-btn.active{
+color:var(--primary);
+font-weight:bold;
+}
+
+/* PROFILE */
+.profile-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:18px;
+}
+
+.profile-avatar{
+width:65px;
+height:65px;
+border-radius:50%;
+background:var(--primary);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.stat-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-top:15px;
+}
+
+.stat{
+background:var(--bg);
+padding:12px 5px;
+text-align:center;
+border-radius:10px;
+}
+
+.stat b{
+display:block;
+font-size:18px;
+}
+
+.stat small{
+font-size:10px;
+color:var(--muted);
+}
+
+/* RESPONSIVE */
+@media(min-width:700px){
+
+.products{
+grid-template-columns:repeat(4,1fr)
+}
+
+.product-img{
+height:180px
+}
+
+.modal{
+align-items:center
+}
+
+.modal-box{
+border-radius:20px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+<div class="header-top">
+
+<div>
+
+<div class="logo">
+🛍️ ሱቅ በኪሴ
+</div>
+
+<div class="subtitle">
+በቀላሉ ይግዙ • በቀላሉ ይሽጡ
+</div>
+
+</div>
+
+<div class="header-actions">
+
+<button class="icon-btn" id="darkBtn">
+🌙
+</button>
+
+</div>
+
+</div>
+
+<div class="search">
+
+<span>🔎</span>
+
+<input
+id="searchInput"
+type="search"
+placeholder="ዕቃ፣ መኪና፣ ስልክ... ይፈልጉ">
+
+</div>
+
+</header>
+
+
+<!-- HOME PAGE -->
+<main class="container" id="homePage">
+
+<!-- CATEGORIES -->
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+🏷️ ምድቦች
+</div>
+
+</div>
+
+<div class="categories" id="categories">
+
+<button class="category active" data-category="all">
+ሁሉም
+</button>
+
+<button class="category" data-category="electronics">
+📱 ኤሌክትሮኒክስ
+</button>
+
+<button class="category" data-category="cars">
+🚗 ተሽከርካሪ
+</button>
+
+<button class="category" data-category="home">
+🏠 የቤት ዕቃ
+</button>
+
+<button class="category" data-category="fashion">
+👗 አልባሳት
+</button>
+
+<button class="category" data-category="other">
+📦 ሌሎች
+</button>
+
+</div>
+
+</section>
+
+
+<!-- VIP -->
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+⭐ VIP / Featured
+</div>
+
+<button class="see-all" id="vipAll">
+ሁሉንም
+</button>
+
+</div>
+
+<div class="vip-scroll" id="vipProducts"></div>
+
+</section>
+
+
+<!-- LATEST -->
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+🆕 የቅርብ ጊዜ
+</div>
+
+</div>
+
+<div class="products" id="products"></div>
+
+</section>
+
+
+<!-- FEEDBACK -->
+<section class="section">
+
+<button
+class="feedback-btn"
+onclick="openFeedback()">
+
+💬 ቅሬታ ወይም አስተያየት
+
+</button>
+
+</section>
+
+</main>
+
+
+<!-- FAVORITES PAGE -->
+<main
+class="container hidden"
+id="favoritesPage">
+
+<div class="section-title">
+❤️ Favorites
+</div>
+
+<div
+class="products"
+id="favoriteProducts"
+style="margin-top:15px">
+</div>
+
+</main>
+
+
+<!-- PROFILE PAGE -->
+<main
+class="container hidden"
+id="profilePage">
+
+<div
+class="section-title"
+style="margin-bottom:15px">
+
+👤 Profile
+
+</div>
+
+<div class="profile-card">
+
+<div
+class="profile-avatar"
+id="profileAvatar">
+
+U
+
+</div>
+
+<h2 id="profileName">
+Guest User
+</h2>
+
+<p
+style="color:var(--muted);font-size:12px;margin-top:4px"
+id="profileUsername">
+
+@username
+
+</p>
+
+<div class="stat-grid">
+
+<div class="stat">
+
+<b id="myPostCount">0</b>
+
+<small>Posts</small>
+
+</div>
+
+<div class="stat">
+
+<b id="favCount">0</b>
+
+<small>Favorites</small>
+
+</div>
+
+<div class="stat">
+
+<b id="activeCount">0</b>
+
+<small>Active</small>
+
+</div>
+
+</div>
+
+<button
+class="primary-btn"
+style="margin-top:15px"
+id="sellFromProfile">
+
+➕ ዕቃ ለመለጠፍ
+
+</button>
+
+</div>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+<button
+class="nav-btn active"
+data-page="homePage">
+
+<span>🏠</span>
+መነሻ
+
+</button>
+
+
+<button
+class="nav-btn"
+id="searchNav">
+
+<span>🔎</span>
+ፈልግ
+
+</button>
+
+
+<button
+class="nav-btn"
+id="favNav">
+
+<span>❤️</span>
+Favorites
+
+</button>
+
+
+<button
+class="nav-btn"
+id="sellNav">
+
+<span>➕</span>
+ሽያጭ
+
+</button>
+
+
+<button
+class="nav-btn"
+id="profileNav">
+
+<span>👤</span>
+Profile
+
+</button>
+
+</nav>
+
+
+<!-- SELL MODAL -->
+<div
+class="modal hidden"
+id="sellModal">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h3>
+➕ ዕቃ ለመለጠፍ
+</h3>
+
+<button
+class="close"
+data-close="sellModal">
+
+✕
+
+</button>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+👤 Telegram Name
+</label>
+
+<input
+class="form-control"
+id="sellerName"
+placeholder="Telegram First Name">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+💬 Telegram Username
+</label>
+
+<input
+class="form-control"
+id="sellerUsername"
+placeholder="@username">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+📱 Phone Number *
+</label>
+
+<input
+class="form-control"
+id="sellerPhone"
+placeholder="09XXXXXXXX"
+type="tel">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+📸 የዕቃው ፎቶዎች
+</label>
+
+<input
+class="form-control"
+id="itemPhotos"
+type="file"
+accept="image/*"
+multiple>
+
+<div
+class="preview"
+id="photoPreview">
+</div>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+📝 የዕቃው ስም *
+</label>
+
+<input
+class="form-control"
+id="itemName"
+placeholder="ለምሳሌ iPhone 15">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+📝 Description *
+</label>
+
+<textarea
+class="form-control"
+id="itemDescription"
+placeholder="ስለ ዕቃው ዝርዝር መረጃ ይጻፉ...">
+</textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+🏷️ Category *
+</label>
+
+<select
+class="form-control"
+id="itemCategory">
+
+<option value="electronics">
+📱 ኤሌክትሮኒክስ
+</option>
+
+<option value="cars">
+🚗 ተሽከርካሪ
+</option>
+
+<option value="home">
+🏠 የቤት ዕቃ
+</option>
+
+<option value="fashion">
+👗 አልባሳት
+</option>
+
+<option value="other">
+📦 ሌሎች
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+💰 Price
+</label>
+
+<input
+class="form-control"
+id="itemPrice"
+placeholder="ዋጋ በብር"
+type="number">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+📍 Location
+</label>
+
+<input
+class="form-control"
+id="itemLocation"
+placeholder="ለምሳሌ Addis Ababa">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+💳 Package
+</label>
+
+<select
+class="form-control"
+id="itemPackage">
+
+<option value="free">
+🎁 የመጀመሪያ ፖስት — FREE
+</option>
+
+<option value="normal1">
+መደበኛ — 1 Post / 20 ብር
+</option>
+
+<option value="normal7">
+መደበኛ — 7 Posts / 100 ብር
+</option>
+
+<option value="normal30">
+መደበኛ — 30 Posts / 300 ብር
+</option>
+
+<option value="vip1">
+⭐ VIP — 1 Post / 50 ብር
+</option>
+
+<option value="vip12">
+⭐ VIP — 12 Posts / 200 ብር
+</option>
+
+<option value="vip45">
+⭐ VIP — 45 Posts / 500 ብር
+</option>
+
+</select>
+
+</div>
+
+
+<button
+class="primary-btn"
+id="submitPost">
+
+🚀 Post
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- PRODUCT DETAILS MODAL -->
+<div
+class="modal hidden"
+id="detailsModal">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h3>
+የዕቃ ዝርዝር
+</h3>
+
+<button
+class="close"
+data-close="detailsModal">
+
+✕
+
+</button>
+
+</div>
+
+<div id="detailsContent"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+DATA
+===================================================== */
+
+const demoProducts = [
+
+{
+id:1,
+name:"iPhone 15 Pro",
+category:"electronics",
+price:45000,
+location:"Addis Ababa",
+seller:"Mickey",
+username:"@seller1",
+phone:"0911223344",
+description:"በጣም ጥሩ ሁኔታ ላይ ያለ iPhone 15 Pro።",
+vip:true,
+status:"approved",
+created:Date.now()
+},
+
+{
+id:2,
+name:"Toyota Corolla",
+category:"cars",
+price:850000,
+location:"Bole",
+seller:"Abebe",
+username:"@seller2",
+phone:"0922334455",
+description:"ጥሩ ሁኔታ ላይ ያለ መኪና።",
+vip:true,
+status:"approved",
+created:Date.now()-1000
+},
+
+{
+id:3,
+name:"Sofa Set",
+category:"home",
+price:35000,
+location:"Addis Ababa",
+seller:"Dawit",
+username:"@seller3",
+phone:"0933445566",
+description:"ዘመናዊ የሶፋ ስብስብ።",
+vip:false,
+status:"approved",
+created:Date.now()-2000
+},
+
+{
+id:4,
+name:"Nike Shoes",
+category:"fashion",
+price:4500,
+location:"Merkato",
+seller:"Sara",
+username:"@seller4",
+phone:"0944556677",
+description:"ኦሪጅናል Nike ጫማ።",
+vip:false,
+status:"approved",
+created:Date.now()-3000
+}
+
+];
+
+
+let products =
+JSON.parse(localStorage.getItem("shopProducts")) || demoProducts;
+
+let favorites =
+JSON.parse(localStorage.getItem("shopFavorites")) || [];
+
+let currentCategory="all";
+
+let selectedPhotos=[];
+
+
+/* =====================================================
+SAVE
+===================================================== */
+
+function saveData(){
+
+localStorage.setItem(
+"shopProducts",
+JSON.stringify(products)
+);
+
+localStorage.setItem(
+"shopFavorites",
+JSON.stringify(favorites)
+);
+
+}
+
+
+/* =====================================================
+CATEGORY NAME
+===================================================== */
+
+function categoryName(cat){
+
+const names={
+
+electronics:"📱 ኤሌክትሮኒክስ",
+cars:"🚗 ተሽከርካሪ",
+home:"🏠 የቤት ዕቃ",
+fashion:"👗 አልባሳት",
+other:"📦 ሌሎች"
+
+};
+
+return names[cat] || cat;
+
+}
+
+
+/* =====================================================
+RENDER PRODUCTS
+===================================================== */
+
+function renderProducts(){
+
+const container =
+document.getElementById("products");
+
+const search =
+document.getElementById("searchInput")
+.value
+.toLowerCase()
+.trim();
+
+
+let list =
+products
+.filter(p=>p.status==="approved")
+.filter(p=>
+currentCategory==="all" ||
+p.category===currentCategory
+)
+.filter(p=>
+!search ||
+p.name.toLowerCase().includes(search) ||
+p.description.toLowerCase().includes(search) ||
+p.location.toLowerCase().includes(search)
+)
+.sort((a,b)=>b.created-a.created);
+
+
+if(!list.length){
+
+container.innerHTML =
+'<div class="empty">🔍 ምንም ዕቃ አልተገኘም</div>';
+
+return;
+
+}
+
+
+container.innerHTML =
+list.map(productCard).join("");
+
+}
+
+
+/* =====================================================
+PRODUCT CARD
+===================================================== */
+
+function productCard(p){
+
+const isFav =
+favorites.includes(p.id);
+
+return `
+
+<article
+class="product"
+onclick="openDetails(${p.id})">
+
+<button
+class="favorite"
+onclick="
+event.stopPropagation();
+toggleFavorite(${p.id})
+">
+
+${isFav ? "❤️" : "♡"}
+
+</button>
+
+
+<div class="product-img">
+📷
+</div>
+
+
+<div class="product-info">
+
+<div class="product-name">
+${escapeHTML(p.name)}
+</div>
+
+<div class="product-price">
+${Number(p.price).toLocaleString()} ብር
+</div>
+
+<div class="product-location">
+📍 ${escapeHTML(p.location)}
+</div>
+
+<div class="product-seller">
+👤 ${escapeHTML(p.seller)}
+</div>
+
+</div>
+
+</article>
+
+`;
+
+}
+
+
+/* =====================================================
+VIP
+===================================================== */
+
+function renderVIP(){
+
+const container =
+document.getElementById("vipProducts");
+
+const vip =
+products
+.filter(p=>p.status==="approved" && p.vip)
+.sort((a,b)=>b.created-a.created);
+
+
+if(!vip.length){
+
+container.innerHTML =
+'<div class="empty">VIP ዕቃ የለም</div>';
+
+return;
+
+}
+
+
+container.innerHTML =
+vip.map(p=>`
+
+<article
+class="vip-card"
+onclick="openDetails(${p.id})">
+
+<div class="vip-img">
+📷
+</div>
+
+<div class="vip-info">
+
+<span class="vip-badge">
+⭐ VIP
+</span>
+
+<div
+style="font-weight:bold;font-size:13px">
+
+${escapeHTML(p.name)}
+
+</div>
+
+<div class="vip-price">
+${Number(p.price).toLocaleString()} ብር
+</div>
+
+<div
+style="
+font-size:10px;
+color:var(--muted);
+margin-top:4px">
+
+📍 ${escapeHTML(p.location)}
+
+</div>
+
+</div>
+
+</article>
+
+`).join("");
+
+}
+
+
+/* =====================================================
+FAVORITES
+===================================================== */
+
+function toggleFavorite(id){
+
+if(favorites.includes(id)){
+
+favorites =
+favorites.filter(x=>x!==id);
+
+}else{
+
+favorites.push(id);
+
+}
+
+saveData();
+
+renderProducts();
+
+renderFavorites();
+
+updateProfile();
+
+}
+
+
+function renderFavorites(){
+
+const container =
+document.getElementById("favoriteProducts");
+
+const list =
+products.filter(
+p=>favorites.includes(p.id)
+);
+
+
+if(!list.length){
+
+container.innerHTML =
+'<div class="empty">❤️ የምትወዷቸው ዕቃዎች እዚህ ይታያሉ</div>';
+
+return;
+
+}
+
+
+container.innerHTML =
+list.map(productCard).join("");
+
+}
+
+
+/* =====================================================
+DETAILS
+===================================================== */
+
+function openDetails(id){
+
+const p =
+products.find(x=>x.id===id);
+
+if(!p)return;
+
+
+const isFav =
+favorites.includes(id);
+
+
+document.getElementById("detailsContent")
+.innerHTML = `
+
+<div class="detail-image">
+📷
+</div>
+
+
+<h2 style="margin-top:14px">
+${escapeHTML(p.name)}
+</h2>
+
+
+<div class="detail-price">
+${Number(p.price).toLocaleString()} ብር
+</div>
+
+
+<p
+style="font-size:12px;color:var(--muted)">
+
+${categoryName(p.category)}
+• 📍 ${escapeHTML(p.location)}
+
+</p>
+
+
+<div style="margin-top:18px">
+
+<h4 style="margin-bottom:7px">
+📝 ዝርዝር መረጃ
+</h4>
+
+<p class="detail-desc">
+${escapeHTML(p.description)}
+</p>
+
+</div>
+
+
+<div class="seller-box">
+
+<b>
+👤 የሻጭ መረጃ
+</b>
+
+
+<p style="margin-top:8px">
+${escapeHTML(p.seller)}
+</p>
+
+
+<p
+style="font-size:12px;color:var(--muted)">
+
+${escapeHTML(p.username || "")}
+
+</p>
+
+
+<div class="contact-row">
+
+<button
+class="call-btn"
+onclick="
+callSeller('${escapeAttribute(p.phone)}')
+">
+
+📞 Call
+
+</button>
+
+
+<button
+class="telegram-btn"
+onclick="
+telegramSeller('${escapeAttribute(p.username)}')
+">
+
+💬 Telegram
+
+</button>
+
+</div>
+
+
+<button
+class="secondary-btn"
+onclick="
+toggleFavorite(${p.id});
+openDetails(${p.id})
+">
+
+${
+isFav
+? "❤️ Remove Favorite"
+: "♡ Add Favorite"
+}
+
+</button>
+
+</div>
+
+`;
+
+
+document
+.getElementById("detailsModal")
+.classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+CONTACT
+===================================================== */
+
+function callSeller(phone){
+
+if(!phone)return;
+
+window.location.href =
+"tel:"+phone;
+
+}
+
+
+function telegramSeller(username){
+
+if(!username)return;
+
+username =
+username.replace("@","");
+
+window.open(
+"https://t.me/"+username,
+"_blank"
+);
+
+}
+
+
+/* =====================================================
+FEEDBACK / COMPLAINT
+===================================================== */
+
+function openFeedback(){
+
+window.open(
+"https://t.me/Diznish",
+"_blank"
+);
+
+}
+
+
+/* =====================================================
+SELL MODAL
+===================================================== */
+
+function openSell(){
+
+document
+.getElementById("sellModal")
+.classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+CLOSE MODAL
+===================================================== */
+
+function closeModal(id){
+
+document
+.getElementById(id)
+.classList.add("hidden");
+
+}
+
+
+/* =====================================================
+PHOTO PREVIEW
+===================================================== */
+
+document
+.getElementById("itemPhotos")
+.addEventListener(
+"change",
+function(){
+
+selectedPhotos =
+Array.from(this.files);
+
+const preview =
+document.getElementById("photoPreview");
+
+preview.innerHTML="";
+
+
+selectedPhotos
+.slice(0,8)
+.forEach(file=>{
+
+const reader =
+new FileReader();
+
+
+reader.onload =
+function(e){
+
+const div =
+document.createElement("div");
+
+div.innerHTML =
+`<img src="${e.target.result}">`;
+
+preview.appendChild(div);
+
+};
+
+
+reader.readAsDataURL(file);
+
+});
+
+}
+);
+
+
+/* =====================================================
+SUBMIT POST
+===================================================== */
+
+document
+.getElementById("submitPost")
+.onclick =
+function(){
+
+const name =
+document
+.getElementById("sellerName")
+.value
+.trim();
+
+
+const username =
+document
+.getElementById("sellerUsername")
+.value
+.trim();
+
+
+const phone =
+document
+.getElementById("sellerPhone")
+.value
+.trim();
+
+
+const itemName =
+document
+.getElementById("itemName")
+.value
+.trim();
+
+
+const description =
+document
+.getElementById("itemDescription")
+.value
+.trim();
+
+
+const category =
+document
+.getElementById("itemCategory")
+.value;
+
+
+const price =
+document
+.getElementById("itemPrice")
+.value;
+
+
+const location =
+document
+.getElementById("itemLocation")
+.value
+.trim();
+
+
+const pkg =
+document
+.getElementById("itemPackage")
+.value;
+
+
+if(
+!name ||
+!username ||
+!phone ||
+!itemName ||
+!description ||
+!price ||
+!location
+){
+
+alert(
+"እባክዎ የሚያስፈልጉትን መረጃዎች በሙሉ ይሙሉ!"
+);
+
+return;
+
+}
+
+
+const userPosts =
+products.filter(
+p=>p.username===username
+).length;
+
+
+let vip=false;
+
+
+if(
+pkg==="vip1" ||
+pkg==="vip12" ||
+pkg==="vip45"
+){
+
+vip=true;
+
+}
+
+
+if(
+userPosts===0 &&
+pkg==="free"
+){
+
+// First post is FREE
+
+}
+
+else if(pkg==="free"){
+
+alert(
+"የመጀመሪያ ፖስትዎ ብቻ ነው ነፃ!"
+);
+
+return;
+
+}
+
+
+const newProduct = {
+
+id:Date.now(),
+
+name:itemName,
+
+category,
+
+price:Number(price),
+
+location,
+
+seller:name,
+
+username,
+
+phone,
+
+description,
+
+vip,
+
+status:"approved",
+
+created:Date.now(),
+
+package:pkg
+
+};
+
+
+products.unshift(
+newProduct
+);
+
+
+saveData();
+
+renderProducts();
+
+renderVIP();
+
+updateProfile();
+
+
+alert(
+"🎉 ዕቃዎ በሰላም ተለጥፏል!"
+);
+
+
+clearSellForm();
+
+closeModal("sellModal");
+
+};
+
+
+/* =====================================================
+CLEAR FORM
+===================================================== */
+
+function clearSellForm(){
+
+document
+.querySelectorAll(
+"#sellModal input,#sellModal textarea"
+)
+.forEach(
+el=>el.value=""
+);
+
+
+document
+.getElementById("photoPreview")
+.innerHTML="";
+
+
+selectedPhotos=[];
+
+}
+
+
+/* =====================================================
+PROFILE
+===================================================== */
+
+function updateProfile(){
+
+const name =
+localStorage.getItem(
+"telegramName"
+) ||
+"Guest User";
+
+
+const username =
+localStorage.getItem(
+"telegramUsername"
+) ||
+"@username";
+
+
+const myPosts =
+products.filter(
+p=>p.username===username
+);
+
+
+document
+.getElementById("profileName")
+.textContent=name;
+
+
+document
+.getElementById("profileUsername")
+.textContent=username;
+
+
+document
+.getElementById("profileAvatar")
+.textContent =
+name.charAt(0).toUpperCase();
+
+
+document
+.getElementById("myPostCount")
+.textContent =
+myPosts.length;
+
+
+document
+.getElementById("favCount")
+.textContent =
+favorites.length;
+
+
+document
+.getElementById("activeCount")
+.textContent =
+myPosts.filter(
+p=>p.status==="approved"
+).length;
+
+}
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function showPage(pageId){
+
+const pages = [
+"homePage",
+"favoritesPage",
+"profilePage"
+];
+
+
+pages.forEach(id=>{
+
+document
+.getElementById(id)
+.classList.add("hidden");
+
+});
+
+
+document
+.getElementById(pageId)
+.classList.remove("hidden");
+
+
+document
+.querySelectorAll(".nav-btn")
+.forEach(btn=>{
+
+btn.classList.remove(
+"active"
+);
+
+
+if(
+btn.dataset.page===pageId
+){
+
+btn.classList.add(
+"active"
+);
+
+}
+
+});
+
+}
+
+
+/* HOME */
+
+document
+.querySelector(
+'[data-page="homePage"]'
+)
+.onclick =
+()=>showPage("homePage");
+
+
+/* FAVORITES */
+
+document
+.getElementById("favNav")
+.onclick =
+function(){
+
+showPage(
+"favoritesPage"
+);
+
+renderFavorites();
+
+};
+
+
+/* PROFILE */
+
+document
+.getElementById("profileNav")
+.onclick =
+function(){
+
+showPage(
+"profilePage"
+);
+
+updateProfile();
+
+};
+
+
+/* SELL */
+
+document
+.getElementById("sellNav")
+.onclick =
+openSell;
+
+
+document
+.getElementById("sellFromProfile")
+.onclick =
+openSell;
+
+
+/* SEARCH */
+
+document
+.getElementById("searchNav")
+.onclick =
+function(){
+
+showPage(
+"homePage"
+);
+
+
+document
+.getElementById("searchInput")
+.focus();
+
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+};
+
+
+/* =====================================================
+CATEGORIES
+===================================================== */
+
+document
+.querySelectorAll(".category")
+.forEach(btn=>{
+
+btn.onclick =
+function(){
+
+document
+.querySelectorAll(
+".category"
+)
+.forEach(
+x=>x.classList.remove(
+"active"
+)
+);
+
+
+this.classList.add(
+"active"
+);
+
+
+currentCategory =
+this.dataset.category;
+
+
+renderProducts();
+
+};
+
+});
+
+
+/* =====================================================
+SEARCH
+===================================================== */
+
+document
+.getElementById(
+"searchInput"
+)
+.addEventListener(
+"input",
+renderProducts
+);
+
+
+/* =====================================================
+VIP ALL
+===================================================== */
+
+document
+.getElementById("vipAll")
+.onclick =
+function(){
+
+showPage("homePage");
+
+currentCategory="all";
+
+document
+.querySelectorAll(
+".category"
+)
+.forEach(
+x=>x.classList.remove(
+"active"
+)
+);
+
+
+document
+.querySelector(
+'[data-category="all"]'
+)
+.classList.add(
+"active"
+);
+
+
+document
+.getElementById(
+"searchInput"
+)
+.value="";
+
+
+renderProducts();
+
+window.scrollTo({
+top:300,
+behavior:"smooth"
+});
+
+};
+
+
+/* =====================================================
+DARK MODE
+===================================================== */
+
+document
+.getElementById("darkBtn")
+.onclick =
+function(){
+
+document
+.body
+.classList.toggle(
+"dark"
+);
+
+
+const dark =
+document.body.classList.contains(
+"dark"
+);
+
+
+localStorage.setItem(
+"shopDark",
+dark
+);
+
+
+this.textContent =
+dark
+? "☀️"
+: "🌙";
+
+};
+
+
+if(
+localStorage.getItem(
+"shopDark"
+)==="true"
+){
+
+document
+.body
+.classList.add(
+"dark"
+);
+
+
+document
+.getElementById(
+"darkBtn"
+)
+.textContent="☀️";
+
+}
+
+
+/* =====================================================
+CLOSE MODALS
+===================================================== */
+
+document
+.querySelectorAll(
+"[data-close]"
+)
+.forEach(btn=>{
+
+btn.onclick =
+function(){
+
+closeModal(
+this.dataset.close
+);
+
+};
+
+});
+
+
+document
+.querySelectorAll(".modal")
+.forEach(modal=>{
+
+modal.addEventListener(
+"click",
+function(e){
+
+if(e.target===this){
+
+this.classList.add(
+"hidden"
+);
+
+}
+
+}
+);
+
+});
+
+
+/* =====================================================
+SECURITY
+===================================================== */
+
+function escapeHTML(value){
+
+return String(value||"")
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+function escapeAttribute(value){
+
+return String(value||"")
+.replace(
+/'/g,
+"&#039;"
+)
+.replace(
+/"/g,
+"&quot;"
+);
+
+}
+
+
+/* =====================================================
+DEMO TELEGRAM USER
+===================================================== */
+
+if(
+!localStorage.getItem(
+"telegramName"
+)
+){
+
+localStorage.setItem(
+"telegramName",
+"Demo User"
+);
+
+
+localStorage.setItem(
+"telegramUsername",
+"@demouser"
+);
+
+}
+
+
+/* =====================================================
+INITIAL LOAD
+===================================================== */
+
+saveData();
+
+renderProducts();
+
+renderVIP();
+
+renderFavorites();
+
+updateProfile();
+
+/* =====================================================
+   TELEGRAM MINI APP
+===================================================== */
+
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+
+    tg.ready();
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+
+    if (user) {
+
+        const fullName =
+            [user.first_name, user.last_name]
+            .filter(Boolean)
+            .join(" ");
+
+        const username =
+            user.username
+            ? "@" + user.username
+            : "";
+
+        localStorage.setItem(
+            "telegramName",
+            fullName || "Telegram User"
+        );
+
+        localStorage.setItem(
+            "telegramUsername",
+            username
+        );
+
+        localStorage.setItem(
+            "telegramUserId",
+            String(user.id)
+        );
+
+        updateProfile();
+    }
+}
+</script>
+
+</body>
+</html>
